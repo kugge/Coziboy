@@ -10,6 +10,7 @@
  * And Pastraiser opcodes table
  * https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
  */
+#include <stddef.h>
 
 // CPU registers implemented following:
 // https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
@@ -33,6 +34,7 @@ struct instruction {
 };
 
 // CPU instruction set in gameboy assembly (with functions).
+// Those functions are available below.
 // Generated with a python script:
 // https://gist.github.com/Kugge/6bca056cbf221570c16f109ecfd72ae7
 const struct instruction instructions[256] = {
@@ -294,5 +296,5 @@ const struct instruction instructions[256] = {
     {"RST 38H", rst_38h},               // 0xff 
 };
 
-// 600
-
+// NOP instruction: Do nothing
+void nop(){}
