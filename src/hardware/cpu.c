@@ -1,12 +1,12 @@
-/* 
+/*
  * COZIBOY by Sofiane Djerbi (@Kugge)
  * Source code and licence available on Github.
  * https://github.com/Kugge/Coziboy
  */
-/* 
- * CPU and assembly implemented following gameboy Pan Docs 
+/*
+ * CPU and assembly implemented following gameboy Pan Docs
  * https://gbdev.io/pandocs/
- * 
+ *
  * And Pastraiser opcodes table
  * https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
  */
@@ -17,13 +17,13 @@
 struct registers {
 	unsigned char a;    // 8 Bit - Hi / Accumulator
     unsigned char f;    // 8 Bit - Lo / Flag (Z N H C)
-	unsigned char b;    // 8 Bit - Hi 
+	unsigned char b;    // 8 Bit - Hi
 	unsigned char c;    // 8 Bit - Lo
 	unsigned char d;    // 8 Bit - Hi
 	unsigned char e;    // 8 Bit - Lo
 	unsigned char h;    // 8 Bit - Hi
 	unsigned char l;    // 8 Bit - Lo
-	unsigned short sp;  // 16 Bit / Stack pointer 
+	unsigned short sp;  // 16 Bit / Stack pointer
 	unsigned short pc;  // 16 Bit / Program counter
 } extern registers;
 
@@ -293,7 +293,7 @@ const struct instruction instructions[256] = {
     {NULL, NULL}                        // 0xfc
     {NULL, NULL}                        // 0xfd
     {"CP d8", cp_d8},                   // 0xfe
-    {"RST 38H", rst_38h},               // 0xff 
+    {"RST 38H", rst_38h},               // 0xff
 };
 
 // NOP instruction: Do nothing
