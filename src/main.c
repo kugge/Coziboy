@@ -34,5 +34,8 @@ int main(int argc, char *argv[]) {
     }
 
     fprintf(stdout,"Loading file \"%s\"...\n", file_name);
+
+    // TODO: Call emulator and load rom + GUI and debug tools
+
     return 0;
 }
