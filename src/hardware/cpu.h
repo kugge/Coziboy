@@ -33,5 +33,6 @@ struct instruction {
     void *process;     // Processing function (execute the opcode)
 } extern const instructions[256];
 
+void print_registers(void);
 void nop(void);
 
