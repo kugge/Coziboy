@@ -4,34 +4,18 @@
  * https://github.com/Kugge/Coziboy
  */
 /*
- * CPU and assembly implemented following gameboy Pan Docs
+ * CPU functions implemented following gameboy Pan Docs
  * https://gbdev.io/pandocs/
  *
- * And Pastraiser opcodes table
+ * CPU opcodes implemented following pastraiser opcodes table
  * https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
  */
 #include <stddef.h>
+#include "cpu.h"
 
-// CPU registers implemented following:
-// https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
-struct registers {
-	unsigned char a;    // 8 Bit - Hi / Accumulator
-    unsigned char f;    // 8 Bit - Lo / Flag (Z N H C)
-	unsigned char b;    // 8 Bit - Hi
-	unsigned char c;    // 8 Bit - Lo
-	unsigned char d;    // 8 Bit - Hi
-	unsigned char e;    // 8 Bit - Lo
-	unsigned char h;    // 8 Bit - Hi
-	unsigned char l;    // 8 Bit - Lo
-	unsigned short sp;  // 16 Bit / Stack pointer
-	unsigned short pc;  // 16 Bit / Program counter
-} extern registers;
-
-// An abstract CPU instruction
-struct instruction {
-    char assembly[11];      // Assembly equivalent (debugging/modding)
-    void (*process)(void);  // Processing function (execute the opcode)
-};
+// NOP Instruction: Do nothing
+void nop(){
+}
 
 // CPU instruction set in gameboy assembly (with functions).
 // Those functions are available below.
@@ -123,7 +107,7 @@ const struct instruction instructions[256] = {
     {"LD D,D", ld_d_d},                 // 0x52
     {"LD D,E", ld_d_e},                 // 0x53
     {"LD D,H", ld_d_h},                 // 0x54
-    {"LD D,L", ld_d_l},                // 0x55
+    {"LD D,L", ld_d_l},                 // 0x55
     {"LD D,(HL)", ld_d_hl},             // 0x56
     {"LD D,A", ld_d_a},                 // 0x57
     {"LD E,B", ld_e_b},                 // 0x58
@@ -296,5 +280,3 @@ const struct instruction instructions[256] = {
     {"RST 38H", rst_38h},               // 0xff
 };
 
-// NOP instruction: Do nothing
-void nop(){}
