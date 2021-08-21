@@ -1,12 +1,24 @@
-/* 
+/*
  * COZIBOY by Sofiane Djerbi (@Kugge)
  * Source code and licence available on Github.
  * https://github.com/Kugge/Coziboy
  */
 
+#include <stdbool.h>
 #include <stdio.h>
-#include <unistd.h>
+#include "hardware/cpu.h"
 
+
+// Return true if the file exists
+bool file_exists(const char *filename)
+{
+    FILE *fp = fopen(filename, "r");
+    if (fp != NULL) {
+        fclose(fp);
+        return true;
+    }
+    return false;
+}
 
 int main(int argc, char *argv[]) {
     // Parse args
@@ -15,12 +27,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     char *file_name = argv[1];
-    // Check if file doesn't exists
-    if (access(file_name, F_OK) != 0) {
+    // Check if file exists
+    if (!file_exists(file_name)) {
         fprintf(stderr, "Error: File %s does not exists.\n", file_name);
         return 2;
     }
 
-    fprintf(stdout,"Loading %s...\n", file_name);
+    fprintf(stdout,"Loading file \"%s\"...\n", file_name);
     return 0;
 }
