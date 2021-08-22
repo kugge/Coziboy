@@ -40,6 +40,6 @@ void print_registers(void);
 void reset(void);
 
 // OP FUNCS
-void undefined(void);
+void undefined(unsigned char);
 void nop(void);
 
