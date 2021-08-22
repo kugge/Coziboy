@@ -25,14 +25,14 @@ void print_registers() {
 
 void reset() {
 	registers.a = 0x01;
-	registers.f = 0xb0;
+	registers.f = 0xB0;
 	registers.b = 0x00;
 	registers.c = 0x13;
 	registers.d = 0x00;
-	registers.e = 0xd8;
+	registers.e = 0xD8;
 	registers.h = 0x01;
-	registers.l = 0x4d;
-	registers.sp = 0xfffe;
+	registers.l = 0x4D;
+	registers.sp = 0xFFFE;
 	registers.pc = 0x0100;
 }
 
