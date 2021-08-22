@@ -1,6 +1,6 @@
 /*
  * COZIBOY by Sofiane Djerbi (@Kugge)
- * Source code and licence available on Github.
+ * Source code and license available on Github.
  * https://github.com/Kugge/Coziboy
  */
 /*
@@ -14,6 +14,7 @@
 #include "cpu.h"
 
 struct registers registers;
+
 
 void print_registers() {
     printf("A: 0x%02X  F: 0x%02X\n", registers.a, registers.f);

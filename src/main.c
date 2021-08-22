@@ -1,12 +1,12 @@
 /*
  * COZIBOY by Sofiane Djerbi (@Kugge)
- * Source code and licence available on Github.
+ * Source code and license available on Github.
  * https://github.com/Kugge/Coziboy
  */
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "hardware/cpu.h"
+#include "coziboy/coziboy.h"
 
 
 // Return true if the file exists

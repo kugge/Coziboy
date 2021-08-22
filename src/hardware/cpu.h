@@ -1,6 +1,6 @@
 /*
  * COZIBOY by Sofiane Djerbi (@Kugge)
- * Source code and licence available on Github.
+ * Source code and license available on Github.
  * https://github.com/Kugge/Coziboy
  */
 #pragma once
