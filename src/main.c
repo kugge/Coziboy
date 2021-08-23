@@ -6,7 +6,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "coziboy/coziboy.h"
+#include "hardware/cpu.h"
 
 
 // Return true if the file exists
