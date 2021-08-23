@@ -5,11 +5,19 @@
  */
 #pragma once
 
-// Binary flags
+// Binary implementation of flags
 #define FLAG_ZERO       (1 << 7) // 1000 0000 (128)
 #define FLAG_NEGATIVE   (1 << 6) // 0100 0000 (64)
 #define FLAG_HALFCARRY  (1 << 5) // 0010 0000 (32)
 #define FLAG_CARRY      (1 << 4) // 0001 0000 (16)
+
+#define FLAG_ISZERO         (registers.f & FLAGS_ZERO)      // Check for Z
+#define FLAG_ISNEGATIVE     (registers.f & FLAGS_NEGATIVE)  // Check for N
+#define FLAG_ISCARRY        (registers.f & FLAGS_CARRY)     // Check for C
+#define FLAG_ISHALFCARRY    (registers.f & FLAGS_HALFCARRY) // Check for H
+
+#define FLAG_SET(x)     (registers.f |= (x))    // Set a flag
+#define FLAG_UNSET(x)   (registers.f &= ~(x))   // Unset a flag
 
 // CPU registers implemented following:
 // https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
@@ -47,4 +55,5 @@ void reset(void);
 // OP FUNCS
 void undefined(unsigned char);
 void nop(void);
+void ld_bc_d16(unsigned char b1, unsigned char b2)
 

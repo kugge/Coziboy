@@ -13,8 +13,30 @@
 #include <stdio.h>
 #include "cpu.h"
 
-struct registers registers;
 
+/********* CPU VARS **********/
+
+// Default registers values
+struct registers registers = {
+    .a = 0x01,
+    .f = 0xB0,
+    .b = 0x00,<
+    .c = 0x13,
+    .d = 0x00,
+    .e = 0xD8,
+    .h = 0x01,
+    .l = 0x4D,
+    .sp = 0xFFFE,
+    .pc = 0x0100
+};
+
+// CPU cycles: "How many cycles left ?"
+struct cycles = 0;
+
+// const "instructions" is defined at the end of this file.
+
+
+/********* HELPER/DEBUG **********/
 
 void print_registers() {
     printf("A: 0x%02X  F: 0x%02X\n", registers.a, registers.f);
@@ -37,15 +59,22 @@ void reset() {
 	registers.pc = 0x0100;
 }
 
+
 /********* CPU INSTRUCTIONS **********/
 
 // UNDEFINED instruction: Debug error
-void undefined(unsigned char val){
-    printf("!! UNDEFINED INSTRUCTION 0x%04X !!", val);
+void undefined(unsigned char id){
+    printf("!! UNDEFINED INSTRUCTION 0x%04X !!", id);
 }
 
-// NOP Instruction: Do nothing
+// 0x00 | NOP | Do nothing
 void nop(){}
+
+// 0x01 | LD BC,d16 | Set BC to a 16bit integer (short)
+void ld_bc_d16(unsigned char b1, unsigned char b2){
+    registers.b = b1;
+    registers.c = b2;
+}
 
 // CPU instruction set in gameboy assembly (with functions).
 // Those functions are available below.
