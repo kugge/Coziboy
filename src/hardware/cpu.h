@@ -24,7 +24,7 @@ struct registers {
     unsigned char l;    // 8 Bit - 4Lo
     unsigned short sp;  // 16 Bit / Stack pointer
     unsigned short pc;  // 16 Bit / Program counter
-} extern registers;
+};
 
 // An abstract CPU instruction
 // Might be extended : CPU cycles, parameters.
@@ -33,7 +33,12 @@ struct instruction {
     unsigned char length;   // Operand length in bytes
     unsigned char cycles;   // Minimum CPU Cycles for this instruction
     void *process;          // Processing function (execute the opcode)
-} extern const instructions[256];
+};
+
+// CPU Vars
+extern struct registers registers;                  // CPU registers
+extern const struct instruction instructions[256];  // CPU opcodes
+extern unsigned char cycles;                        // CPU cycles left
 
 // ASSIST/DEBUG FUNCS
 void print_registers(void);
