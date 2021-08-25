@@ -56,4 +56,7 @@ void reset(void);
 void undefined(unsigned char);
 void nop(void);
 void ld_bc_d16(unsigned char b1, unsigned char b2)
-
+void ld_bc_a(void);
+void inc_bc(void);
+void inc_b(void);
+void dec_b(void);

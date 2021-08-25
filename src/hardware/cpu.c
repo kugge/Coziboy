@@ -5,10 +5,13 @@
  */
 /*
  * CPU functions implemented following gameboy Pan Docs
- * https://gbdev.io/pandocs/
+ * https://gbdev.io/pandocs/CPU_Instruction_Set.html
  *
  * CPU opcodes implemented following pastraiser opcodes table
  * https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
+ *
+ * 8 Bit <-> 16 Bit : Little endian
+ *
  */
 #include <stdio.h>
 #include "cpu.h"
@@ -18,16 +21,16 @@
 
 // Default registers values
 struct registers registers = {
-    .a = 0x01,
-    .f = 0xB0,
-    .b = 0x00,<
-    .c = 0x13,
+    .a = 0x00,
+    .f = 0x00,
+    .b = 0x00,
+    .c = 0x00,
     .d = 0x00,
-    .e = 0xD8,
-    .h = 0x01,
-    .l = 0x4D,
-    .sp = 0xFFFE,
-    .pc = 0x0100
+    .e = 0x00,
+    .h = 0x00,
+    .l = 0x00,
+    .sp = 0x0000,
+    .pc = 0x0000
 };
 
 // CPU cycles: "How many cycles left ?"
@@ -46,17 +49,18 @@ void print_registers() {
     printf("SP: 0x%04X\nPC: 0x%04X\n", registers.sp, registers.pc);
 }
 
+// Reset registers
 void reset() {
-	registers.a = 0x01;
-	registers.f = 0xB0;
+	registers.a = 0x00;
+	registers.f = 0x00;
 	registers.b = 0x00;
-	registers.c = 0x13;
+	registers.c = 0x00;
 	registers.d = 0x00;
-	registers.e = 0xD8;
-	registers.h = 0x01;
-	registers.l = 0x4D;
-	registers.sp = 0xFFFE;
-	registers.pc = 0x0100;
+	registers.e = 0x00;
+	registers.h = 0x00;
+	registers.l = 0x00;
+	registers.sp = 0x0000;
+	registers.pc = 0x0000;
 }
 
 
@@ -76,28 +80,51 @@ void ld_bc_d16(unsigned char b1, unsigned char b2){
     registers.c = b2;
 }
 
+// 0x02 | LD (BC),A | Load A in BC
+void ld_bc_a(){
+    registers.c = registers.a // Little endian
+}
+
+void inc_bc(){
+    short bc = (registers.b << 8) | registers.c;
+    bc++;
+    registers.c = bc;
+    bc = bc >> 8;
+    registers.b = bc;
+}
+
+// 0x04 | INC B | Increment B
+void inc_bc(){
+    registers.b++;
+}
+
+// 0x05 | INC B | Decrement B
+void dec_bc(){
+    registers.b--;
+}
+
 // CPU instruction set in gameboy assembly (with functions).
 // Those functions are available below.
 // Generated with a python script:
 // https://gist.github.com/Kugge/6bca056cbf221570c16f109ecfd72ae7
 /*
 const struct instruction instructions[256] = {
-    {"NOP", 0, 4, nop},                      // 0x0
-    {"LD BC,0x%04X", 2, 12, ld_bc_d16},      // 0x1
-    {"LD (BC),A", 0, 8, ld_bc_a},            // 0x2
-    {"INC BC", 0, 8, inc_bc},                // 0x3
-    {"INC B", 0, 4, inc_b},                  // 0x4
-    {"DEC B", 0, 4, dec_b},                  // 0x5
-    {"LD B,0x%02X", 1, 8, ld_b_d8},          // 0x6
-    {"RLCA", 0, 4, rlca},                    // 0x7
-    {"LD (0x%04X),SP", 2, 20, ld_a16_sp},    // 0x8
-    {"ADD HL,BC", 0, 8, add_hl_bc},          // 0x9
-    {"LD A,(BC)", 0, 8, ld_a_bc},            // 0xa
-    {"DEC BC", 0, 8, dec_bc},                // 0xb
-    {"INC C", 0, 4, inc_c},                  // 0xc
-    {"DEC C", 0, 4, dec_c},                  // 0xd
-    {"LD C,0x%02X", 1, 8, ld_c_d8},          // 0xe
-    {"RRCA", 0, 4, rrca},                    // 0xf
+    {"NOP", 0, 4, nop},                      // 0x00
+    {"LD BC,0x%04X", 2, 12, ld_bc_d16},      // 0x01
+    {"LD (BC),A", 0, 8, ld_bc_a},            // 0x02
+    {"INC BC", 0, 8, inc_bc},                // 0x03
+    {"INC B", 0, 4, inc_b},                  // 0x04
+    {"DEC B", 0, 4, dec_b},                  // 0x05
+    {"LD B,0x%02X", 1, 8, ld_b_d8},          // 0x06
+    {"RLCA", 0, 4, rlca},                    // 0x07
+    {"LD (0x%04X),SP", 2, 20, ld_a16_sp},    // 0x08
+    {"ADD HL,BC", 0, 8, add_hl_bc},          // 0x09
+    {"LD A,(BC)", 0, 8, ld_a_bc},            // 0x0a
+    {"DEC BC", 0, 8, dec_bc},                // 0x0b
+    {"INC C", 0, 4, inc_c},                  // 0x0c
+    {"DEC C", 0, 4, dec_c},                  // 0x0d
+    {"LD C,0x%02X", 1, 8, ld_c_d8},          // 0x0e
+    {"RRCA", 0, 4, rrca},                    // 0x0f
     {"STOP 0", 0, 4, stop_0},                // 0x10
     {"LD DE,0x%04X", 2, 12, ld_de_d16},      // 0x11
     {"LD (DE),A", 0, 8, ld_de_a},            // 0x12
