@@ -20,21 +20,10 @@
 /********* CPU VARS **********/
 
 // Default registers values
-struct registers registers = {
-    .a = 0x00,
-    .f = 0x00,
-    .b = 0x00,
-    .c = 0x00,
-    .d = 0x00,
-    .e = 0x00,
-    .h = 0x00,
-    .l = 0x00,
-    .sp = 0x0000,
-    .pc = 0x0000
-};
+struct registers registers;
 
 // CPU cycles: "How many cycles left ?"
-struct cycles = 0;
+extern unsigned char cycles = 0;
 
 // const "instructions" is defined at the end of this file.
 
@@ -63,29 +52,45 @@ void reset() {
 	registers.pc = 0x0000;
 }
 
+// Process an instruction
+// Param:
+// - n: List of chars (max length = 3)
+void process(unsigned char n[3]) {
+    unsigned char id = n[0];
+    struct instruction *i = &instructions[id];
+    cycles += i->cycles;
+    if (i->length == 0) {
+        i->process();
+    } else if (i->length == 1) {
+        i->process(n[1]);
+    } else if (i->length == 2) {
+        i->process(n[1], n[2]);
+    }
+}
+
 
 /********* CPU INSTRUCTIONS **********/
 
 // UNDEFINED instruction: Debug error
-void undefined(unsigned char id){
+void undefined(unsigned char id) {
     printf("!! UNDEFINED INSTRUCTION 0x%04X !!", id);
 }
 
 // 0x00 | NOP | Do nothing
-void nop(){}
+void nop() {}
 
 // 0x01 | LD BC,d16 | Set BC to a 16bit integer (short)
-void ld_bc_d16(unsigned char b1, unsigned char b2){
+void ld_bc_d16(unsigned char b1, unsigned char b2) {
     registers.b = b1;
     registers.c = b2;
 }
 
 // 0x02 | LD (BC),A | Load A in BC
-void ld_bc_a(){
-    registers.c = registers.a // Little endian
+void ld_bc_a() {
+    registers.c = registers.a; // Little endian
 }
 
-void inc_bc(){
+void inc_bc() {
     short bc = (registers.b << 8) | registers.c;
     bc++;
     registers.c = bc;
@@ -94,12 +99,12 @@ void inc_bc(){
 }
 
 // 0x04 | INC B | Increment B
-void inc_bc(){
+void inc_b() {
     registers.b++;
 }
 
 // 0x05 | INC B | Decrement B
-void dec_bc(){
+void dec_b() {
     registers.b--;
 }
 
@@ -107,7 +112,7 @@ void dec_bc(){
 // Those functions are available below.
 // Generated with a python script:
 // https://gist.github.com/Kugge/6bca056cbf221570c16f109ecfd72ae7
-/*
+
 const struct instruction instructions[256] = {
     {"NOP", 0, 4, nop},                      // 0x00
     {"LD BC,0x%04X", 2, 12, ld_bc_d16},      // 0x01
@@ -115,6 +120,7 @@ const struct instruction instructions[256] = {
     {"INC BC", 0, 8, inc_bc},                // 0x03
     {"INC B", 0, 4, inc_b},                  // 0x04
     {"DEC B", 0, 4, dec_b},                  // 0x05
+    /*
     {"LD B,0x%02X", 1, 8, ld_b_d8},          // 0x06
     {"RLCA", 0, 4, rlca},                    // 0x07
     {"LD (0x%04X),SP", 2, 20, ld_a16_sp},    // 0x08
@@ -365,4 +371,5 @@ const struct instruction instructions[256] = {
     {"UNDEFINED", 0, 0, undefined}           // 0xfd
     {"CP 0x%02X", 1, 8, cp_d8},              // 0xfe
     {"RST 38H", 0, 16, rst_38h},             // 0xff
-};*/
+    */
+};

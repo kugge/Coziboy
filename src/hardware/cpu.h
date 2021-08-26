@@ -40,7 +40,7 @@ struct instruction {
     char assembly[16];      // Assembly equivalent (debugging/modding)
     unsigned char length;   // Operand length in bytes
     unsigned char cycles;   // Minimum CPU Cycles for this instruction
-    void *process;          // Processing function (execute the opcode)
+    void (*process)();      // Processing function (execute the opcode)
 };
 
 // CPU Vars
@@ -51,11 +51,12 @@ extern unsigned char cycles;                        // CPU cycles left
 // ASSIST/DEBUG FUNCS
 void print_registers(void);
 void reset(void);
+void process(unsigned char []);
 
 // OP FUNCS
 void undefined(unsigned char);
 void nop(void);
-void ld_bc_d16(unsigned char b1, unsigned char b2)
+void ld_bc_d16(unsigned char, unsigned char);
 void ld_bc_a(void);
 void inc_bc(void);
 void inc_b(void);

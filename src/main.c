@@ -10,10 +10,9 @@
 
 
 // Return true if the file exists
-bool file_exists(const char *filename)
-{
+bool file_exists(const char *filename) {
     FILE *fp = fopen(filename, "r");
-    if (fp != NULL) {
+    if (fp != NULL){
         fclose(fp);
         return true;
     }
