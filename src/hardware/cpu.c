@@ -108,21 +108,32 @@ void dec_b() {
     registers.b--;
 }
 
+// 0x06 | LD BC,d8 | Set B to a 8 bit integer (char)
+void ld_b_d8(unsigned char b) {
+    registers.b = b;
+}
+
+// 0x07 | RCLA | Rotate A left
+void rlca() {
+    registers.a = (registers.a << 1) | (registers.a >> 7);
+}
+
+
 // CPU instruction set in gameboy assembly (with functions).
 // Those functions are available below.
 // Generated with a python script:
 // https://gist.github.com/Kugge/6bca056cbf221570c16f109ecfd72ae7
 
-const struct instruction instructions[256] = {
+static const struct instruction instructions[256] = {
     {"NOP", 0, 4, nop},                      // 0x00
     {"LD BC,0x%04X", 2, 12, ld_bc_d16},      // 0x01
     {"LD (BC),A", 0, 8, ld_bc_a},            // 0x02
     {"INC BC", 0, 8, inc_bc},                // 0x03
     {"INC B", 0, 4, inc_b},                  // 0x04
     {"DEC B", 0, 4, dec_b},                  // 0x05
-    /*
     {"LD B,0x%02X", 1, 8, ld_b_d8},          // 0x06
     {"RLCA", 0, 4, rlca},                    // 0x07
+    /*
     {"LD (0x%04X),SP", 2, 20, ld_a16_sp},    // 0x08
     {"ADD HL,BC", 0, 8, add_hl_bc},          // 0x09
     {"LD A,(BC)", 0, 8, ld_a_bc},            // 0x0a

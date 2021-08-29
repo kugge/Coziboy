@@ -45,8 +45,8 @@ struct instruction {
 
 // CPU Vars
 extern struct registers registers;                  // CPU registers
-extern const struct instruction instructions[256];  // CPU opcodes
 extern unsigned char cycles;                        // CPU cycles left
+static const struct instruction instructions[256];  // CPU opcodes
 
 // ASSIST/DEBUG FUNCS
 void print_registers(void);
@@ -61,3 +61,5 @@ void ld_bc_a(void);
 void inc_bc(void);
 void inc_b(void);
 void dec_b(void);
+void ld_b_d8(unsigned char);
+void rlca(void);
