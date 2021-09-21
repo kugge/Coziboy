@@ -14,6 +14,7 @@
  *
  */
 #include <stdio.h>
+#include <stdint.h>
 #include "cpu.h"
 
 
@@ -23,7 +24,7 @@
 struct registers registers;
 
 // CPU cycles: "How many cycles left ?"
-extern unsigned char cycles = 0;
+extern uint8_t cycles = 0;
 
 // const "instructions" is defined at the end of this file.
 
@@ -55,7 +56,7 @@ void reset() {
 // Process an instruction
 // Param:
 // - n: List of chars (max length = 3)
-void process(unsigned char n[3]) {
+void process(uint8_t n[3]) {
     unsigned char id = n[0];
     struct instruction *i = &instructions[id];
     cycles += i->cycles;
@@ -72,7 +73,7 @@ void process(unsigned char n[3]) {
 /********* CPU INSTRUCTIONS **********/
 
 // UNDEFINED instruction: Debug error
-void undefined(unsigned char id) {
+void undefined(uint8_t id) {
     printf("!! UNDEFINED INSTRUCTION 0x%04X !!", id);
 }
 
@@ -80,7 +81,7 @@ void undefined(unsigned char id) {
 void nop() {}
 
 // 0x01 | LD BC,d16 | Set BC to a 16bit integer (short)
-void ld_bc_d16(unsigned char b1, unsigned char b2) {
+void ld_bc_d16(uint8_t b1, uint8_t b2) {
     registers.b = b1;
     registers.c = b2;
 }
@@ -91,7 +92,7 @@ void ld_bc_a() {
 }
 
 void inc_bc() {
-    short bc = (registers.b << 8) | registers.c;
+    uint16_t bc = (registers.b << 8) | registers.c;
     bc++;
     registers.c = bc;
     bc = bc >> 8;
@@ -117,6 +118,8 @@ void ld_b_d8(unsigned char b) {
 void rlca() {
     registers.a = (registers.a << 1) | (registers.a >> 7);
 }
+
+// 0x08 | LD d16,SP | Load 16bit int in SP
 
 
 // CPU instruction set in gameboy assembly (with functions).

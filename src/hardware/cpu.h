@@ -4,6 +4,7 @@
  * https://github.com/Kugge/Coziboy
  */
 #pragma once
+#include <stdint.h>
 
 // Binary implementation of flags
 #define FLAG_ZERO       (1 << 7) // 1000 0000 (128)
@@ -22,44 +23,44 @@
 // CPU registers implemented following:
 // https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
 struct registers {
-    unsigned char a;    // 8 Bit - 1Hi / Accumulator
-    unsigned char f;    // 8 Bit - 1Lo / Flag (Z N H C)
-    unsigned char b;    // 8 Bit - 2Hi
-    unsigned char c;    // 8 Bit - 2Lo
-    unsigned char d;    // 8 Bit - 3Hi
-    unsigned char e;    // 8 Bit - 3Lo
-    unsigned char h;    // 8 Bit - 4Hi
-    unsigned char l;    // 8 Bit - 4Lo
-    unsigned short sp;  // 16 Bit / Stack pointer
-    unsigned short pc;  // 16 Bit / Program counter
+    uint8_t a;    // 8 Bit - 1Hi / Accumulator
+    uint8_t f;    // 8 Bit - 1Lo / Flag (Z N H C)
+    uint8_t b;    // 8 Bit - 2Hi
+    uint8_t c;    // 8 Bit - 2Lo
+    uint8_t d;    // 8 Bit - 3Hi
+    uint8_t e;    // 8 Bit - 3Lo
+    uint8_t h;    // 8 Bit - 4Hi
+    uint8_t l;    // 8 Bit - 4Lo
+    uint16_t sp;  // 16 Bit / Stack pointer
+    uint16_t pc;  // 16 Bit / Program counter
 };
 
 // An abstract CPU instruction
 // Might be extended : CPU cycles, parameters.
 struct instruction {
     char assembly[16];      // Assembly equivalent (debugging/modding)
-    unsigned char length;   // Operand length in bytes
-    unsigned char cycles;   // Minimum CPU Cycles for this instruction
+    uint8_t length;         // Operand length in bytes
+    uint8_t cycles;         // Minimum CPU Cycles for this instruction
     void (*process)();      // Processing function (execute the opcode)
 };
 
 // CPU Vars
 extern struct registers registers;                  // CPU registers
-extern unsigned char cycles;                        // CPU cycles left
+extern uint8_t cycles;                              // CPU cycles left
 static const struct instruction instructions[256];  // CPU opcodes
 
 // ASSIST/DEBUG FUNCS
 void print_registers(void);
 void reset(void);
-void process(unsigned char []);
+void process(uint8_t []);
 
 // OP FUNCS
-void undefined(unsigned char);
+void undefined(uint8_t);
 void nop(void);
-void ld_bc_d16(unsigned char, unsigned char);
+void ld_bc_d16(uint8_t, uint8_t);
 void ld_bc_a(void);
 void inc_bc(void);
 void inc_b(void);
 void dec_b(void);
-void ld_b_d8(unsigned char);
+void ld_b_d8(uint8_t);
 void rlca(void);
